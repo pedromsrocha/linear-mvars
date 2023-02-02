@@ -1,0 +1,53 @@
+cabal-version: 3.0
+
+
+name:           linear-mvars
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/pedromsrocha/linear-mvars#readme>
+homepage:       https://github.com/pedromsrocha/linear-mvars#readme
+bug-reports:    https://github.com/pedromsrocha/linear-mvars/issues
+author:         Pedro Rocha
+copyright:      2023 Pedro Rocha
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    
+source-repository head
+  type: git
+  location: https://github.com/pedromsrocha/linear-mvars
+
+common shared
+  build-depends:      
+    base >=4.7 && <5,
+    linear-base 
+  default-language: Haskell2010
+  default-extensions: 
+    ImportQualifiedPost
+    LinearTypes
+
+library
+  import: shared
+  exposed-modules:
+      LVars
+  hs-source-dirs:
+      src
+
+test-suite examples
+  import: shared
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Counter
+      LList
+      LChan
+      Test.Counter
+      Test.LList
+      Test.LChan
+  hs-source-dirs:
+      examples
+  build-depends:
+      base >=4.7 && <5,
+      HUnit,
+      linear-mvars
