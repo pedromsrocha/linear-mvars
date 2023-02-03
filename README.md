@@ -60,7 +60,7 @@ By using the LVars API in Linear Haskell your programs are guaranteed to be dead
 
 More specifically, the linear type system disallows arbitrary LVars values from being copied and consumed, they can only be shared and disposed with the provided API methods `share` and `dispose`. 
 
-The API guarantees that at most one LVar can be shared among two concurrent threads, guaranteeing that the sharing topologies are always acyclic. If we were allowed to share more than one LVar, we could easily obtain blocked programs such as 
+The API guarantees that at most one LVar can be shared among two concurrent threads, guaranteeing that the sharing topologies are always acyclic. If we were allowed to share more than one LVar, we could easily obtain potentially-blocked programs such as 
 ```haskell
 do (c1, c2, Ur _) <- share (c1,c2) (\c1, c2 -> do (v1, c1) <- takeL c1; 
                                                   (v2, c2) <- takeL c2; 
@@ -70,7 +70,7 @@ do (c1, c2, Ur _) <- share (c1,c2) (\c1, c2 -> do (v1, c1) <- takeL c1;
                            ...
 ```
 
-The dipose operation can only be applied to a full LVar. In particular, the only possible operations on an empty LVar are `putL` and `share`. Therefore, when an LVar is taken the type system guarantees that a put operation will follow. Hence, blocked programs like the following 
+The dipose operation can only be applied to a full LVar. In particular, the only possible operations on an empty LVar are `putL` and `share`. Therefore, when an LVar is taken the type system guarantees that a put operation will follow. Hence, potentially-blocked programs like the following 
 ```haskell
 do (c, Ur _) <- share c dispose 
    (v, c) <- take c; 
