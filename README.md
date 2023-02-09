@@ -8,14 +8,14 @@ How does it work? Basically, by using linear types and exposing a safe API for L
 
 ## Build instructions 
 
-Get [Stack](https://docs.haskellstack.org/en/stable/), move to this project folder and input `stack test` in the terminal.
+Get [Stack](https://docs.haskellstack.org/en/stable/), change directory to project folder and input `stack test` in the terminal.
 
 Stack will build the project and run some tests. If everything is ok (🤞) you should see the message 
 > Test suite examples passed
 
 ## LVars API 
 
-I'm assuming that you have a basic knowledge of Haskell's linear types (i.e., you know what a linear arrow  `% 1 ->` means) and the library [linear-base](https://github.com/tweag/linear-base).  
+I'm assuming that you have a basic knowledge of Haskell's linear types (i.e., you know what a linear arrow  `% 1 ->` means) and of the library [linear-base](https://github.com/tweag/linear-base).  
 
 First things first: there are two methods:
 ```haskell 
@@ -38,7 +38,7 @@ dispose:: Full a %1 -> Linear.IO
 
 You can think of `dispose` as an effectul version of `consume`, as provided by the module `Data.Unrestriced.Linear` of the linear-base libary. In fact, [I've already asked](https://github.com/tweag/linear-base/issues/436) if there are plans of having something like `dispose` in future releases. 
 
-Notice that we can only release an LVar in its full state. If the LVar is empty we must put, otherwise other concurrent take operations will be left hanging forever. 
+Notice that we can only dispose an LVar in its full state. If the LVar is empty we must put, otherwise other concurrent take operations will be left hanging forever. 
 
 Finally, to get interesting programs you must be able to share an LVar among concurrent threads, which can be done with the following method
 ```haskell 
@@ -58,7 +58,7 @@ These two operations expose the LVar as empty to only one of the threads, which 
 
 By using the LVars API in Linear Haskell your programs are guaranteed to be deadlock-free, this follows because of linear types and the safe API for LVars manipulation. 
 
-More specifically, the linear type system disallows arbitrary LVars values from being copied and consumed, they can only be shared and disposed with the provided API methods `share` and `dispose`. 
+More specifically, the linear type system disallows LVars values from being arbitrarily copied and consumed, they can only be shared and disposed with the provided API methods `share` and `dispose`. 
 
 The API guarantees that at most one LVar can be shared among two concurrent threads, guaranteeing that the sharing topologies are always acyclic. If we were allowed to share more than one LVar, we could easily obtain potentially-blocked programs such as 
 ```haskell
