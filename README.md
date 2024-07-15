@@ -77,9 +77,3 @@ do (c, Ur _) <- share c dispose
    ...
 ```
 are excluded.
-
-## Examples 
-TODO 
-
-## Some References 
-TODO 
